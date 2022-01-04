@@ -7,16 +7,9 @@ import Contacts from "./components/contacts/Contacts.jsx";
 import Filter from "./components/filter/Filter.jsx";
 
 export default function App() {
-  // static propTypes = {
-  //   contacts: PropTypes.array,
-  //   value: PropTypes.string,
-  //   onSubmit: PropTypes.func,
-  //   onValidate: PropTypes.func,
-  //   onChange: PropTypes.func,
-  //   onDeleteContact: PropTypes.func,
-  // };
-
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(
+    JSON.parse(localStorage.getItem("contacts")) ?? []
+  );
   const [filter, setFilter] = useState("");
 
   const addContact = ({ name, number }) => {
@@ -54,6 +47,10 @@ export default function App() {
     return !isDuplicate;
   };
 
+  useEffect(() => {
+    localStorage.setItem("contacts", JSON.stringify(contacts));
+  }, [contacts]);
+
   return (
     <Container>
       <h1>Phonebook</h1>
@@ -65,16 +62,11 @@ export default function App() {
   );
 }
 
-//   componentDidUpdate(prevProps, prevState) {
-//     if (this.state.contacts !== prevState.contacts) {
-//       localStorage.setItem("contacts", JSON.stringify(this.state.contacts));
-//     }
-//   }
-
-//   componentDidMount() {
-//     const contacts = localStorage.getItem("contacts");
-//     const parsedContacts = JSON.parse(contacts);
-//     if (parsedContacts) {
-//       this.setState({ contacts: parsedContacts });
-//     }
-//   }
+App.propTypes = {
+  contacts: PropTypes.array,
+  value: PropTypes.string,
+  onSubmit: PropTypes.func,
+  onValidate: PropTypes.func,
+  onChange: PropTypes.func,
+  onDeleteContact: PropTypes.func,
+};
